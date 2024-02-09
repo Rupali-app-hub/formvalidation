@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './App.css'; // Import the CSS file
+import './App.css'; 
 import TaskList from './TaskList';
 
 function App() {
@@ -20,40 +20,33 @@ function App() {
             ...formData,
             [name]: value
         });
+
+        // Validation checks
+        const newErrors = {
+            ...errors
+        };
+
+        if (name === 'name') {
+            newErrors.name = value.trim() === '' ? 'Name is required.' : '';
+        } else if (name === 'email') {
+            newErrors.email = /^\S+@\S+\.\S+$/.test(value) ? '' : 'Valid email is required.';
+        } else if (name === 'message') {
+            newErrors.message = value.trim() === '' ? 'Message cannot be empty.' : '';
+        }
+
+        setErrors(newErrors);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Validation checks
-        let isValid = true;
-        const newErrors = {
-            name: '',
-            email: '',
-            message: ''
-        };
-
-        if (formData.name.trim() === '') {
-            newErrors.name = 'Name is required.';
-            isValid = false;
-        }
-
-        if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-            newErrors.email = 'Valid email is required.';
-            isValid = false;
-        }
-
-        if (formData.message.trim() === '') {
-            newErrors.message = 'Message cannot be empty.';
-            isValid = false;
-        }
-
-        setErrors(newErrors);
-
         // Form submission
-        if (isValid) {
-            // Perform form submission action (e.g., display alert or send data to server)
+        if (errors.name === '' && errors.email === '' && errors.message === '') {
+            
             console.log('Form data:', formData);
+            window.alert("Thank you for submiting")
+        } else {
+            console.log('Validation errors:', errors);
         }
     };
 
